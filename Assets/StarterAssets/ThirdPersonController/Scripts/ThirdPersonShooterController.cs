@@ -4,6 +4,8 @@ using UnityEngine;
 using Cinemachine;
 using StarterAssets;
 using UnityEngine.InputSystem;
+
+
 public class ThirdPersonShooterController : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
@@ -17,6 +19,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private ThirdPersonController thirdPersonController;
     private StarterAssetsInputs starterAssetsInputs;
+    private EnemyController enemyController;
     private Animator animator;
     private bool isNear = false;
     private float range;
@@ -67,10 +70,18 @@ public class ThirdPersonShooterController : MonoBehaviour
             thirdPersonController.SetRotateOnMove(true);
         }
 
+        int enemyLayerMask = 1 <<
+            LayerMask.NameToLayer("Enemy");
         if (starterAssetsInputs.shoot)
         {
             Vector3 aimDir = (mouseWorldPosition - spawnBulletPosition.position).normalized;
             Instantiate(pfBulletProjectile, spawnBulletPosition.position, Quaternion.LookRotation(aimDir, Vector3.up));
+            if(Physics.Raycast(ray, out RaycastHit enemy, Mathf.Infinity, enemyLayerMask))
+            {
+                Debug.Log("Hitted");
+                enemy.collider.gameObject.GetComponent<EnemyController>().Hit();
+                
+            }
             starterAssetsInputs.shoot = false;
         }
 
@@ -93,5 +104,7 @@ public class ThirdPersonShooterController : MonoBehaviour
                 thirdPersonController.SetGunMotion();
             }
         }
+
+
     }
 }
