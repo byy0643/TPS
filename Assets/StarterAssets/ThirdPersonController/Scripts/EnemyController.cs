@@ -5,20 +5,18 @@ public class EnemyController : MonoBehaviour
     public Transform center;
     public float radius = 15.0f;
     public float speed = 1.0f;
-    public Vector3 forwardDir;
-    public GameObject gameObject;
     public Vector3[] targets;
     public Animator animator;
 
     public int hp = 5;
 
-    private float angle = 0;
+    //private float angle = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
-
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -27,6 +25,10 @@ public class EnemyController : MonoBehaviour
         //angle += speed * Time.deltaTime;
         //transform.position = center.position + new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
         
+    }
+    public void Spawn()
+    {
+        gameObject.SetActive(true);
     }
 
     public void Hit()
@@ -43,5 +45,7 @@ public class EnemyController : MonoBehaviour
     public void Die()
     {
         animator.SetTrigger("Die");
+
+        Application.Quit();
     }
 }
